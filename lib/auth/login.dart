@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     builder: (context) => const HomeScreen()));
                           }).onError((error, stackTrace) {
                             Fluttertoast.showToast(
-                                msg: "Credenziali non valide, ${error.toString()}",
+                                msg: error.toString(),
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER,
                                 backgroundColor: Colors.green,

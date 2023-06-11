@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:prog_mobile_flutter/auth/login.dart';
 import 'package:prog_mobile_flutter/widgets/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../home.dart';
 import '../utils/color_utils.dart';
@@ -23,6 +24,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _telefonoTextController = TextEditingController();
   final TextEditingController _dataNascitaTextController =
       TextEditingController();
+  TextEditingController _ruoloTextController = TextEditingController();
+  TextEditingController _sessoTextController = TextEditingController();
 
   String? selectedValue;
   var ruoli = ['Attaccante', 'Difensore', 'Portiere'];
@@ -35,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.lightGreen,
           elevation: 0,
           title: const Text(
             "Registrati",
@@ -165,10 +168,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               onChanged: (value) {
                                 setState(() {
                                   selectedValue = value;
+                                  _ruoloTextController.text = value!;
                                 });
                               },
                               onSaved: (value) {
                                 selectedValue = value.toString();
+                                _ruoloTextController.text = value!;
                               },
                               icon: const Icon(
                                 Icons.arrow_drop_down,
@@ -228,10 +233,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               onChanged: (value) {
                                 setState(() {
                                   selectedValue = value;
+                                  _sessoTextController.text = value!;
                                 });
                               },
                               onSaved: (value) {
                                 selectedValue = value.toString();
+                                _sessoTextController.text = value!;
                               },
                               icon: const Icon(
                                 Icons.arrow_drop_down,
@@ -274,7 +281,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
+                            firstDate: DateTime(1950),
                             lastDate: DateTime(2101));
 
                         if (pickedDate != null) {
@@ -304,6 +311,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               email: _emailTextController.text,
                               password: _passwordTextController.text)
                           .then((value) {
+                        Map<String, String> userData = {
+                          'Nome': _nomeTextController.text,
+                          'Cognome': _cognomeTextController.text,
+                          'Telefono': _telefonoTextController.text,
+                          'Ruolo': _ruoloTextController.text,
+                          'Sesso': _sessoTextController.text,
+                          'Data di Nascita': _dataNascitaTextController.text,
+                          'Email': _emailTextController.text,
+                          'Password': _passwordTextController.text
+                        };
+                        FirebaseFirestore.instance
+                            .collection('users').doc(_emailTextController.text).set(userData).then((value) => print("User added")).onError((error, stackTrace) =>
+                            Fluttertoast.showToast(
+                                msg: error.toString(),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                backgroundColor: Colors.green,
+                                textColor: Colors.black87,
+                                fontSize: 16)
+                        );
+
                         Fluttertoast.showToast(
                             msg: "Nuovo account registrato, bevenuto!",
                             toastLength: Toast.LENGTH_SHORT,
@@ -315,9 +343,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const HomeScreen()));
-                      }).onError((error, stackTrace){
+                      }).onError((error, stackTrace) {
                         Fluttertoast.showToast(
-                            msg: "Registrazione fallita! ${error.toString()}",
+                            msg: error.toString(),
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.CENTER,
                             backgroundColor: Colors.green,
