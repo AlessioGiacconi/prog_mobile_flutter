@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:prog_mobile_flutter/auth/register.dart';
+import 'package:prog_mobile_flutter/home.dart';
 import 'package:prog_mobile_flutter/utils/color_utils.dart';
 
 import '../widgets/widgets.dart';
@@ -56,24 +59,39 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 30,
                         ),
-                        textfieldWidget("Inserisci Email", Icons.person_outline,
-                            false, _emailTextController),
+                        textfieldWidget("Inserisci Email", false,
+                            _emailTextController, Icons.person_outline),
                         const SizedBox(
                           height: 20,
                         ),
-                        textfieldWidget("Inserisci Password",
-                            Icons.lock_outlined, true, _passwordTextController),
+                        textfieldWidget("Inserisci Password", true,
+                            _passwordTextController, Icons.lock_outlined),
                         const SizedBox(
                           height: 50,
                         ),
-                        loginRegisterButton(context, true, () {}),
+                        loginRegisterButton(context, true, () {
+                          FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: _emailTextController.text,
+                                  password: _passwordTextController.text)
+                              .then((value) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const HomeScreen()));
+                          }).onError((error, stackTrace) {
+                            Fluttertoast.showToast(
+                                msg: "Credenziali non valide, ${error.toString()}",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                backgroundColor: Colors.green,
+                                textColor: Colors.black87,
+                                fontSize: 16);
+                          });
+                        }),
                         registerOption()
                       ],
-                    )
-                )
-            )
-        )
-    );
+                    )))));
   }
 
   Row registerOption() {
@@ -84,8 +102,10 @@ class _LoginScreenState extends State<LoginScreen> {
             style: TextStyle(color: Colors.black87, fontFamily: "McLaren")),
         GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const RegisterScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const RegisterScreen()));
           },
           child: const Text(
             " Registrati!",
@@ -99,5 +119,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-

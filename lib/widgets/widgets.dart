@@ -1,5 +1,7 @@
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:prog_mobile_flutter/utils/color_utils.dart';
 
 Image logoWidget(String imageName) {
@@ -11,8 +13,9 @@ Image logoWidget(String imageName) {
   );
 }
 
-TextField textfieldWidget(String text, IconData icon, bool isPasswordType,
-    TextEditingController controller) {
+TextField textfieldWidget(
+    String text, bool isPasswordType, TextEditingController controller,
+    [IconData? icon]) {
   return TextField(
     controller: controller,
     obscureText: isPasswordType,
@@ -72,8 +75,5 @@ Container loginRegisterButton(
       ),
     ),
   );
-
-
 }
-
 
