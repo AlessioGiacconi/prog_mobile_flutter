@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:prog_mobile_flutter/auth/login.dart';
 import 'package:prog_mobile_flutter/firebase_options.dart';
 
-Future<void> main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -26,4 +28,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

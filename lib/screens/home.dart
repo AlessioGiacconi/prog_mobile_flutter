@@ -15,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         title: Text(
           "Meet&Kick",
-          style: TextStyle(color: hexStringToColor('#288510') , fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: hexStringToColor('#288510'),
+              fontSize: 24,
+              fontWeight: FontWeight.bold),
         ),
       ),
       body: Container(
@@ -36,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 fit: BoxFit.cover)),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20,50, 20, 20),
+            padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
             child: Column(
               children: <Widget>[
                 Container(
@@ -51,46 +53,53 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 100,
                 ),
-                elevatedButton('Cerca un evento', Icons.calendar_month_outlined, () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchEventScreen()));
+                elevatedButton('Cerca un evento', Icons.calendar_month_outlined,
+                    () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SearchEventScreen()));
                 }),
                 const SizedBox(
                   height: 70,
                 ),
-                elevatedButton('Crea il tuo evento', Icons.add_box_outlined, () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateEventScreen()));
+                elevatedButton('Crea il tuo evento', Icons.add_box_outlined,
+                    () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CreateEventScreen()));
                 }),
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar:
-          BottomNavigationBar(
-              backgroundColor: hexStringToColor("#9FCF72"),
-              onTap: _onItemTapped,
-              items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Il tuo profilo',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.logout),
-          label: 'Logout',
-        ),
-      ]),
+      bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: hexStringToColor("#9FCF72"),
+          onTap: _onItemTapped,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Il tuo profilo',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.logout),
+              label: 'Logout',
+            ),
+          ]),
     );
   }
 
-  void _onItemTapped(int index){
-    if(index == 0){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+  void _onItemTapped(int index) {
+    if (index == 0) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const ProfileScreen()));
     }
-    if(index == 1){
+    if (index == 1) {
       FirebaseAuth.instance.signOut();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()));
     }
   }
-
-
 }

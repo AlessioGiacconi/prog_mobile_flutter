@@ -22,7 +22,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _nomeTextController = TextEditingController();
   final TextEditingController _cognomeTextController = TextEditingController();
   final TextEditingController _telefonoTextController = TextEditingController();
-  final TextEditingController _dataNascitaTextController = TextEditingController();
+  final TextEditingController _dataNascitaTextController =
+      TextEditingController();
   TextEditingController _ruoloTextController = TextEditingController();
   TextEditingController _sessoTextController = TextEditingController();
 
@@ -321,15 +322,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           'Password': _passwordTextController.text
                         };
                         FirebaseFirestore.instance
-                            .collection('users').doc(_emailTextController.text).set(userData).then((value) => print("User added")).onError((error, stackTrace) =>
-                            Fluttertoast.showToast(
-                                msg: error.toString(),
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                backgroundColor: Colors.green,
-                                textColor: Colors.black87,
-                                fontSize: 16)
-                        );
+                            .collection('users')
+                            .doc(_emailTextController.text)
+                            .set(userData)
+                            .then((value) => print("User added"))
+                            .onError((error, stackTrace) =>
+                                Fluttertoast.showToast(
+                                    msg: error.toString(),
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    backgroundColor: Colors.green,
+                                    textColor: Colors.black87,
+                                    fontSize: 16));
 
                         Fluttertoast.showToast(
                             msg: "Nuovo account registrato, bevenuto!",

@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:prog_mobile_flutter/utils/color_utils.dart';
 
 Image logoWidget(String imageName) {
@@ -83,7 +83,8 @@ SizedBox elevatedButton(String btnName, IconData icon, Function onTap) {
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         backgroundColor: hexStringToColor('#EAFFDD'),
       ),
       onPressed: () {
@@ -100,6 +101,54 @@ SizedBox elevatedButton(String btnName, IconData icon, Function onTap) {
             btnName,
             style: const TextStyle(fontFamily: 'McLaren', fontSize: 30.0),
           ),
+        ],
+      ),
+    ),
+  );
+}
+
+Container profileTextView(String field, String user) {
+  return Container(
+    height: 60,
+    decoration: BoxDecoration(
+        color: Colors.white24,
+        border: Border.all(
+          color: hexStringToColor('#288510'),
+          width: 3,
+        ),
+        borderRadius: BorderRadius.circular(10.0)),
+    child: Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          DefaultTextStyle(
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'McLaren',
+              color: Colors.black,
+            ),
+            child: Text(field),
+          ),
+          FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            future:
+                FirebaseFirestore.instance.collection('users').doc(user).get(),
+            builder: (_, snapshot) {
+              if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text("Loading");
+              }
+              Map<String, dynamic> data = snapshot.data!.data()!;
+              return DefaultTextStyle(
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontFamily: 'McLaren',
+                    color: Colors.black,
+                  ),
+                  child: Text(data[field]));
+            },
+          )
         ],
       ),
     ),
