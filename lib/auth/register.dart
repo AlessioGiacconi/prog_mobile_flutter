@@ -22,8 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _nomeTextController = TextEditingController();
   final TextEditingController _cognomeTextController = TextEditingController();
   final TextEditingController _telefonoTextController = TextEditingController();
-  final TextEditingController _dataNascitaTextController =
-      TextEditingController();
+  final TextEditingController _dataNascitaTextController = TextEditingController();
   TextEditingController _ruoloTextController = TextEditingController();
   TextEditingController _sessoTextController = TextEditingController();
 

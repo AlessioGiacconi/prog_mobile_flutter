@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -77,3 +76,32 @@ Container loginRegisterButton(
   );
 }
 
+SizedBox elevatedButton(String btnName, IconData icon, Function onTap) {
+  return SizedBox(
+    width: 425,
+    height: 150,
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        backgroundColor: hexStringToColor('#EAFFDD'),
+      ),
+      onPressed: () {
+        onTap();
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 50.0),
+          const SizedBox(
+            width: 5,
+          ),
+          Text(
+            btnName,
+            style: const TextStyle(fontFamily: 'McLaren', fontSize: 30.0),
+          ),
+        ],
+      ),
+    ),
+  );
+}
