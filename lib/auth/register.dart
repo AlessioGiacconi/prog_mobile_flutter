@@ -6,7 +6,7 @@ import 'package:prog_mobile_flutter/auth/login.dart';
 import 'package:prog_mobile_flutter/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../home.dart';
+import '../screens/home.dart';
 import '../utils/color_utils.dart';
 
 class RegisterScreen extends StatefulWidget {

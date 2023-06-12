@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:prog_mobile_flutter/auth/login.dart';
+import 'package:prog_mobile_flutter/screens/create_event.dart';
+import 'package:prog_mobile_flutter/screens/profile.dart';
+import 'package:prog_mobile_flutter/screens/search_event.dart';
 import 'package:prog_mobile_flutter/utils/color_utils.dart';
 import 'package:prog_mobile_flutter/widgets/widgets.dart';
 
@@ -12,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,11 +51,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 100,
                 ),
-                elevatedButton('Cerca un evento', Icons.calendar_month_outlined, () {}),
+                elevatedButton('Cerca un evento', Icons.calendar_month_outlined, () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchEventScreen()));
+                }),
                 const SizedBox(
                   height: 70,
                 ),
-                elevatedButton('Crea il tuo evento', Icons.add_box_outlined, () {}),
+                elevatedButton('Crea il tuo evento', Icons.add_box_outlined, () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateEventScreen()));
+                }),
               ],
             ),
           ),
@@ -60,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar:
           BottomNavigationBar(
               backgroundColor: hexStringToColor("#9FCF72"),
+              onTap: _onItemTapped,
               items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
@@ -72,4 +81,16 @@ class _HomeScreenState extends State<HomeScreen> {
       ]),
     );
   }
+
+  void _onItemTapped(int index){
+    if(index == 0){
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+    }
+    if(index == 1){
+      FirebaseAuth.instance.signOut();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+    }
+  }
+
+
 }

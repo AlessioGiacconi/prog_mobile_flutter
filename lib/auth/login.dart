@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:prog_mobile_flutter/auth/register.dart';
-import 'package:prog_mobile_flutter/home.dart';
+import 'package:prog_mobile_flutter/screens/home.dart';
 import 'package:prog_mobile_flutter/utils/color_utils.dart';
 
 import '../widgets/widgets.dart';
