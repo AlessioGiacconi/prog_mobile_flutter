@@ -22,8 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _nomeTextController = TextEditingController();
   final TextEditingController _cognomeTextController = TextEditingController();
   final TextEditingController _telefonoTextController = TextEditingController();
-  final TextEditingController _dataNascitaTextController =
-      TextEditingController();
+  final TextEditingController _dataNascitaTextController = TextEditingController();
   TextEditingController _ruoloTextController = TextEditingController();
   TextEditingController _sessoTextController = TextEditingController();
 
@@ -102,6 +101,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: Colors.black.withOpacity(0.8),
                           fontFamily: "McLaren"),
                       decoration: InputDecoration(
+                        prefixIconConstraints: const BoxConstraints(
+                            minWidth: 50
+                        ),
                         prefixIcon: const Icon(
                           Icons.phone,
                           color: Colors.black87,
@@ -261,6 +263,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: Colors.black.withOpacity(0.8),
                           fontFamily: "McLaren"),
                       decoration: InputDecoration(
+                        prefixIconConstraints: const BoxConstraints(
+                            minWidth: 50
+                        ),
                         prefixIcon: const Icon(
                           Icons.calendar_today_rounded,
                           color: Colors.black87,
@@ -306,55 +311,68 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 20,
                     ),
                     loginRegisterButton(context, false, () {
-                      FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                              email: _emailTextController.text,
-                              password: _passwordTextController.text)
-                          .then((value) {
-                        Map<String, String> userData = {
-                          'Nome': _nomeTextController.text,
-                          'Cognome': _cognomeTextController.text,
-                          'Telefono': _telefonoTextController.text,
-                          'Ruolo': _ruoloTextController.text,
-                          'Sesso': _sessoTextController.text,
-                          'Data di Nascita': _dataNascitaTextController.text,
-                          'Email': _emailTextController.text,
-                          'Password': _passwordTextController.text
-                        };
-                        FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(_emailTextController.text)
-                            .set(userData)
-                            .then((value) => print("User added"))
-                            .onError((error, stackTrace) =>
-                                Fluttertoast.showToast(
-                                    msg: error.toString(),
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    backgroundColor: Colors.green,
-                                    textColor: Colors.black87,
-                                    fontSize: 16));
+                      if(_nomeTextController.text.isNotEmpty && _cognomeTextController.text.isNotEmpty && _telefonoTextController.text.isNotEmpty &&
+                      _ruoloTextController.text.isNotEmpty && _sessoTextController.text.isNotEmpty && _dataNascitaTextController.text.isNotEmpty &&
+                      _emailTextController.text.isNotEmpty && _passwordTextController.text.isNotEmpty
+                      ){
+                        FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                            email: _emailTextController.text,
+                            password: _passwordTextController.text)
+                            .then((value) {
+                          Map<String, String> userData = {
+                            'Nome': _nomeTextController.text,
+                            'Cognome': _cognomeTextController.text,
+                            'Telefono': _telefonoTextController.text,
+                            'Ruolo': _ruoloTextController.text,
+                            'Sesso': _sessoTextController.text,
+                            'Data di Nascita': _dataNascitaTextController.text,
+                            'Email': _emailTextController.text,
+                            'Password': _passwordTextController.text
+                          };
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(_emailTextController.text)
+                              .set(userData)
+                              .then((value) => print("User added"))
+                              .onError((error, stackTrace) =>
+                              Fluttertoast.showToast(
+                                  msg: error.toString(),
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.black87,
+                                  fontSize: 16));
 
+                          Fluttertoast.showToast(
+                              msg: "Nuovo account registrato, bevenuto!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.black87,
+                              fontSize: 16);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomeScreen()));
+                        }).onError((error, stackTrace) {
+                          Fluttertoast.showToast(
+                              msg: error.toString(),
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.black87,
+                              fontSize: 16);
+                        });
+                      } else {
                         Fluttertoast.showToast(
-                            msg: "Nuovo account registrato, bevenuto!",
+                            msg: "Assicurati di aver compilato tutti i campi",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.CENTER,
                             backgroundColor: Colors.green,
                             textColor: Colors.black87,
                             fontSize: 16);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomeScreen()));
-                      }).onError((error, stackTrace) {
-                        Fluttertoast.showToast(
-                            msg: error.toString(),
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            backgroundColor: Colors.green,
-                            textColor: Colors.black87,
-                            fontSize: 16);
-                      });
+                      }
                     }),
                     loginOption(),
                   ],

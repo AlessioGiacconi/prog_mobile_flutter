@@ -24,6 +24,7 @@ TextField textfieldWidget(
     style:
         TextStyle(color: Colors.black.withOpacity(0.8), fontFamily: "McLaren"),
     decoration: InputDecoration(
+      prefixIconConstraints: const BoxConstraints(minWidth: 50),
       prefixIcon: Icon(
         icon,
         color: Colors.black87,
@@ -41,6 +42,34 @@ TextField textfieldWidget(
     keyboardType: isPasswordType
         ? TextInputType.visiblePassword
         : TextInputType.emailAddress,
+  );
+}
+
+TextField createEventTextFieldWidget(
+    String text, TextEditingController controller,
+    [IconData? icon]) {
+  return TextField(
+    controller: controller,
+    autocorrect: true,
+    cursorColor: Colors.black,
+    style:
+        TextStyle(color: Colors.black.withOpacity(0.8), fontFamily: 'McLaren'),
+    decoration: InputDecoration(
+      prefixIconConstraints: const BoxConstraints(minWidth: 50),
+      prefixIcon: Icon(
+        icon,
+        color: Colors.black87,
+      ),
+      labelText: text,
+      labelStyle: TextStyle(
+          color: Colors.black.withOpacity(0.8), fontFamily: 'McLaren'),
+      filled: true,
+      floatingLabelBehavior: FloatingLabelBehavior.never,
+      fillColor: Colors.white.withOpacity(0.8),
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: const BorderSide(width: 0, style: BorderStyle.none)),
+    ),
   );
 }
 
@@ -153,4 +182,70 @@ Container profileTextView(String field, String user) {
       ),
     ),
   );
+}
+
+class MultiSelect extends StatefulWidget {
+  final List<String> items;
+
+  const MultiSelect({super.key, required this.items});
+
+  @override
+  State<MultiSelect> createState() => _MultiSelectState();
+}
+
+class _MultiSelectState extends State<MultiSelect> {
+  final List<String> _selectedItems = [];
+
+  void _itemChange(String itemValue, bool isSelected) {
+    setState(() {
+      if (isSelected) {
+        _selectedItems.add(itemValue);
+      } else {
+        _selectedItems.remove(itemValue);
+      }
+    });
+  }
+
+  void _cancel() {
+    Navigator.pop(context);
+  }
+
+  List<String> _submit() {
+    Navigator.pop(context, _selectedItems);
+    return _selectedItems;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const DefaultTextStyle(
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'McLaren',
+          color: Colors.black,
+        ),
+        child: Text('Seleziona i ruoli'),
+      ),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: widget.items
+              .map((item) => CheckboxListTile(
+                    value: _selectedItems.contains(item),
+                    title: Text(item),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    onChanged: (isChecked) => _itemChange(item, isChecked!),
+                  ))
+              .toList(),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _cancel,
+          child: const Text('Cancella'),
+        ),
+        ElevatedButton(onPressed: _submit, child: const Text('Conferma')),
+      ],
+    );
+  }
 }
