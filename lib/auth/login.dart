@@ -106,6 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => const RegisterScreen()));
+            Navigator.pop(context);
           },
           child: const Text(
             " Registrati!",

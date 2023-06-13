@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:prog_mobile_flutter/widgets/widgets.dart';
 
 import '../utils/color_utils.dart';
@@ -13,11 +15,13 @@ class CreateEventScreen extends StatefulWidget {
 }
 
 class _CreateEventScreenState extends State<CreateEventScreen> {
+  var creatore = FirebaseAuth.instance.currentUser!.email;
+
   final TextEditingController _titoloTextController = TextEditingController();
   final TextEditingController _dataTextController = TextEditingController();
   final TextEditingController _oraTextController = TextEditingController();
   final TextEditingController _luogoTextController = TextEditingController();
-  TextEditingController _ruoliTextController = TextEditingController();
+  final TextEditingController _ruoliTextController = TextEditingController();
   double _currentSliderValue = 1;
   final TextEditingController _descrizioneTextController = TextEditingController();
 
@@ -225,10 +229,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                   Slider(
                                     value: _currentSliderValue,
                                     onChanged: (newValue) {
-                                      setState(
-                                          () {
-                                            _currentSliderValue = newValue;
-                                          });
+                                      setState(() {
+                                        _currentSliderValue = newValue;
+                                      });
                                     },
                                     min: 1,
                                     max: 9,
@@ -243,8 +246,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  SizedBox(
-                    height: 200,
+                  IntrinsicHeight(
                     child: TextField(
                       controller: _descrizioneTextController,
                       keyboardType: TextInputType.multiline,
@@ -252,25 +254,111 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       autocorrect: true,
                       enableSuggestions: true,
                       cursorColor: Colors.black,
-                      style: TextStyle(color: Colors.black.withOpacity(0.8), fontFamily: "McLaren"),
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(0.8),
+                          fontFamily: "McLaren"),
                       decoration: InputDecoration(
-                        prefixIconConstraints: const BoxConstraints(minWidth: 50),
+                        prefixIconConstraints:
+                            const BoxConstraints(minWidth: 50),
                         prefixIcon: const Icon(
                           Icons.short_text_outlined,
                           color: Colors.black87,
                         ),
-                        labelText: 'Inserisci una Descrizione per il tuo Evento',
+                        labelText:
+                            'Inserisci una Descrizione per il tuo Evento',
                         labelStyle: TextStyle(
-                            color: Colors.black.withOpacity(0.8), fontFamily: "McLaren"),
+                            color: Colors.black.withOpacity(0.8),
+                            fontFamily: "McLaren"),
                         filled: true,
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         fillColor: Colors.white.withOpacity(0.8),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(width: 0, style: BorderStyle.none)),
+                            borderSide: const BorderSide(
+                                width: 0, style: BorderStyle.none)),
                       ),
                     ),
-                  )
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(90)),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_titoloTextController.text.isNotEmpty &&
+                            _dataTextController.text.isNotEmpty &&
+                            _oraTextController.text.isNotEmpty &&
+                            _luogoTextController.text.isNotEmpty &&
+                            _ruoliTextController.text.isNotEmpty &&
+                            _descrizioneTextController.text.isNotEmpty) {
+                          Map<String, dynamic> eventData = {
+                            'Creatore': creatore,
+                            'Titolo': _titoloTextController.text,
+                            'Data': _dataTextController.text,
+                            'Ora': _oraTextController.text,
+                            'Luogo': _luogoTextController.text,
+                            'Ruoli Richiesti': _ruoliTextController.text,
+                            'N° Persone': _currentSliderValue,
+                            'Descrizione': _descrizioneTextController.text
+                          };
+                          FirebaseFirestore.instance
+                              .collection('events')
+                              .doc(_titoloTextController.text)
+                              .set(eventData)
+                              .then((value) => Fluttertoast.showToast(
+                                  msg: "Nuovo evento registrato",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.black87,
+                                  fontSize: 16))
+                              .onError((error, stackTrace) =>
+                                  Fluttertoast.showToast(
+                                      msg: error.toString(),
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      backgroundColor: Colors.green,
+                                      textColor: Colors.black87,
+                                      fontSize: 16));
+                          Navigator.pop(context);
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "Assicurati di aver compilato tutti i campi",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.black87,
+                              fontSize: 16);
+                        }
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return hexStringToColor('#288510');
+                            }
+                            return hexStringToColor('#1ECA00');
+                          }),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(30)))),
+                      child: const Text(
+                        'CONFERMA',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "McLaren",
+                            fontSize: 16),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

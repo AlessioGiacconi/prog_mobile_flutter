@@ -30,8 +30,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var ruoli = ['Attaccante', 'Difensore', 'Portiere'];
   var sesso = ['Maschio', 'Femmina'];
 
-  final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,9 +99,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: Colors.black.withOpacity(0.8),
                           fontFamily: "McLaren"),
                       decoration: InputDecoration(
-                        prefixIconConstraints: const BoxConstraints(
-                            minWidth: 50
-                        ),
+                        prefixIconConstraints:
+                            const BoxConstraints(minWidth: 50),
                         prefixIcon: const Icon(
                           Icons.phone,
                           color: Colors.black87,
@@ -263,9 +260,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: Colors.black.withOpacity(0.8),
                           fontFamily: "McLaren"),
                       decoration: InputDecoration(
-                        prefixIconConstraints: const BoxConstraints(
-                            minWidth: 50
-                        ),
+                        prefixIconConstraints:
+                            const BoxConstraints(minWidth: 50),
                         prefixIcon: const Icon(
                           Icons.calendar_today_rounded,
                           color: Colors.black87,
@@ -311,14 +307,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 20,
                     ),
                     loginRegisterButton(context, false, () {
-                      if(_nomeTextController.text.isNotEmpty && _cognomeTextController.text.isNotEmpty && _telefonoTextController.text.isNotEmpty &&
-                      _ruoloTextController.text.isNotEmpty && _sessoTextController.text.isNotEmpty && _dataNascitaTextController.text.isNotEmpty &&
-                      _emailTextController.text.isNotEmpty && _passwordTextController.text.isNotEmpty
-                      ){
+                      if (_nomeTextController.text.isNotEmpty &&
+                          _cognomeTextController.text.isNotEmpty &&
+                          _telefonoTextController.text.isNotEmpty &&
+                          _ruoloTextController.text.isNotEmpty &&
+                          _sessoTextController.text.isNotEmpty &&
+                          _dataNascitaTextController.text.isNotEmpty &&
+                          _emailTextController.text.isNotEmpty &&
+                          _passwordTextController.text.isNotEmpty) {
                         FirebaseAuth.instance
                             .createUserWithEmailAndPassword(
-                            email: _emailTextController.text,
-                            password: _passwordTextController.text)
+                                email: _emailTextController.text,
+                                password: _passwordTextController.text)
                             .then((value) {
                           Map<String, String> userData = {
                             'Nome': _nomeTextController.text,
@@ -336,13 +336,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               .set(userData)
                               .then((value) => print("User added"))
                               .onError((error, stackTrace) =>
-                              Fluttertoast.showToast(
-                                  msg: error.toString(),
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.CENTER,
-                                  backgroundColor: Colors.green,
-                                  textColor: Colors.black87,
-                                  fontSize: 16));
+                                  Fluttertoast.showToast(
+                                      msg: error.toString(),
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      backgroundColor: Colors.green,
+                                      textColor: Colors.black87,
+                                      fontSize: 16));
 
                           Fluttertoast.showToast(
                               msg: "Nuovo account registrato, bevenuto!",
@@ -391,6 +391,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           onTap: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const LoginScreen()));
+            Navigator.pop(context);
           },
           child: const Text(
             " Login",
