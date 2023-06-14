@@ -89,6 +89,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontSize: 16);
                           });
                         }),
+                        const SizedBox(
+                          height: 5,
+                        ),
                         registerOption()
                       ],
                     )))));
@@ -99,18 +102,18 @@ class _LoginScreenState extends State<LoginScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text("Non hai ancora un account?",
-            style: TextStyle(color: Colors.black87, fontFamily: "McLaren")),
+            style: TextStyle(color: Colors.black87, fontFamily: "McLaren", fontSize: 16)),
         GestureDetector(
           onTap: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => const RegisterScreen()));
-            Navigator.pop(context);
           },
           child: const Text(
             " Registrati!",
             style: TextStyle(
+                fontSize: 16,
                 color: Colors.black87,
                 fontFamily: "McLaren",
                 fontWeight: FontWeight.bold),

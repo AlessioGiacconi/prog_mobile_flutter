@@ -22,7 +22,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _nomeTextController = TextEditingController();
   final TextEditingController _cognomeTextController = TextEditingController();
   final TextEditingController _telefonoTextController = TextEditingController();
-  final TextEditingController _dataNascitaTextController = TextEditingController();
+  final TextEditingController _dataNascitaTextController =
+      TextEditingController();
   TextEditingController _ruoloTextController = TextEditingController();
   TextEditingController _sessoTextController = TextEditingController();
 
@@ -374,6 +375,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             fontSize: 16);
                       }
                     }),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     loginOption(),
                   ],
                 ),
@@ -386,16 +390,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text("Hai già un account? Effettua il",
-            style: TextStyle(color: Colors.black87, fontFamily: "McLaren")),
+            style: TextStyle(
+                color: Colors.black87, fontFamily: "McLaren", fontSize: 16)),
         GestureDetector(
           onTap: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const LoginScreen()));
-            Navigator.pop(context);
           },
           child: const Text(
             " Login",
             style: TextStyle(
+                fontSize: 16,
                 color: Colors.black87,
                 fontFamily: "McLaren",
                 fontWeight: FontWeight.bold),
