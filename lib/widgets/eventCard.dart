@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prog_mobile_flutter/screens/event_detail.dart';
 import 'package:prog_mobile_flutter/utils/color_utils.dart';
 
 class EventCard extends StatelessWidget {
@@ -11,7 +12,13 @@ class EventCard extends StatelessWidget {
     return Container(
       height: 150,
       child: GestureDetector(
-          onTap: () => {},
+          onTap: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            EventDetailsScreen(event: _event)))
+              },
           child: Card(
             elevation: 5,
             margin: const EdgeInsets.all(5),

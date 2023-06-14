@@ -21,7 +21,6 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
   @override
   void initState() {
     super.initState();
-    super.didChangeDependencies();
     getEventList();
   }
 

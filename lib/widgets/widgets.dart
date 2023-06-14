@@ -248,3 +248,37 @@ class _MultiSelectState extends State<MultiSelect> {
     );
   }
 }
+
+Container eventDetailTextView(String field, String value){
+  return Container(
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          DefaultTextStyle(
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'McLaren',
+              color: Colors.black,
+            ),
+            child: Text(field),
+          ),
+          const Spacer(),
+          Flexible(
+            child: DefaultTextStyle(
+              textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'McLaren',
+                  color: Colors.black,
+                ),
+                child: Text(value)),
+          ),
+
+        ],
+      ),
+    ),
+  );
+}
