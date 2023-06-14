@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:prog_mobile_flutter/widgets/eventCard.dart';
 
-import '../utils/event.dart';
 import '../utils/color_utils.dart';
 
 class SearchEventScreen extends StatefulWidget {
@@ -14,11 +14,12 @@ class SearchEventScreen extends StatefulWidget {
 class _SearchEventScreenState extends State<SearchEventScreen> {
   
   final CollectionReference _eventsCollection = FirebaseFirestore.instance.collection('events');
-  List<Object> _eventList = [];
+  final List<Map<String,dynamic>> _eventList = [];
+
 
   @override
-  void didChangeDependencies(){
-    super.didChangeDependencies();
+  void initState(){
+    super.initState();
     getEventList();
   }
 
@@ -47,7 +48,7 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
           child: ListView.builder(
             itemCount: _eventList.length,
             itemBuilder: (context, index) {
-              return Text('$index');
+              return EventCard(_eventList[index]);
             }
           ),
           ),
@@ -58,7 +59,11 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
   Future getEventList() async {
       QuerySnapshot querySnapshot = await _eventsCollection.get();
       setState(() {
-        _eventList = List.from(querySnapshot.docs.map((event) => Event.fromSnapshot(event)));
+        querySnapshot.docs.forEach((element) {
+          Map<String, dynamic>? event = element.data() as Map<String, dynamic>?;
+          _eventList.add(event!);
+        });
       });
   }
 }
+
